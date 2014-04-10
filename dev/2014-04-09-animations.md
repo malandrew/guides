@@ -175,9 +175,9 @@ Transitionable.registerMethod('snap', SnapTransition);
 
 var state = new Transitionable(0);
 
-state.set(100, {method : 'spring', dampingRatio : 0.5, period : 500); // spring
-state.set(0,   {method : 'wall',   dampingRatio : 0.5, period : 500); // wall
-state.set(100, {method : 'snap',   dampingRatio : 0.5, period : 500); // snap
+state.set(100, {method : 'spring', dampingRatio : 0.5, period : 500}); // spring
+state.set(0,   {method : 'wall',   dampingRatio : 0.5, period : 500}); // wall
+state.set(100, {method : 'snap',   dampingRatio : 0.5, period : 500}); // snap
 ```
 
 You only need to register a physics transition once per app. After you register it
