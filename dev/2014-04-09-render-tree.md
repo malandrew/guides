@@ -229,7 +229,7 @@ S1  S2  S3  ⋯  S10
 ```
 
 Notice in the above example, S10 doesn't have to be a Famo.us Surface; it could
-have be a view with its own modifiers, other nodes, even another scrollview.
+have been a view with its own modifiers, other nodes, even another scrollview.
 You could have a scrollview whose first item has a cross-fading opacity between
 two surfaces by letting S10 be its own View with the structure:
 
@@ -270,7 +270,7 @@ nesting structure; everything is flattened by the time it gets to the DOM.
 In all the examples above, you'll notice a pattern: a Render Tree starts with
 a Context, branches into a bunch of Modifiers, and ends with Surfaces. Unlike
 the DOM, where nodes mix visual representation with syntactic clustering, the
-Render Tree makes a clear separation between layout (Modifiers) content
+Render Tree makes a clear separation between layout (Modifiers), content
 (Surfaces) and structure (`.add`).
 
 In fact, if you want to know what the position, or opacity of a surface
