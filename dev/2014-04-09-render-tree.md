@@ -1,30 +1,78 @@
 The Famo.us Render Tree
 =======================
 
-One of the first things to notice about Famo.us is how little
-we expose HTML and the DOM to the developer. Interacting with the DOM is riddled
-with performance issues. Famo.us abstracts away DOM management by maintaining a
-representation of it in JavaScript called the Render Tree.
+One of the first things to notice about Famo.us is how little we expose HTML and 
+the DOM to the developer. Because XML (and by extension HTML) only supports two 
+types, strings and children, interacting with the DOM is riddled with performance 
+issues. To manage these extremely inefficient interactions with the DOM that 
+developers do everyday in other frameworks, Famo.us abstracts away DOM management 
+entirely by maintaining a representation of it in JavaScript that we call the 
+Render Tree.
 
-If you inspect a website running Famo.us, you'll notice the DOM
-is very flat: most elements are siblings of one another. Inspect any other
-website, and you'll see the DOM is highly nested. Famo.us takes a radically
-different approach to HTML from a conventional website. We keep the structure of
-HTML in JavaScript, and to us, HTML is more like a list of things to draw to the
-screen than the source of truth of a website.
+When Tim Berners-Lee designed HTML, he designed a language for describing hypertext
+documents with hyperlinks. This worked great for years until [CGI][cgi] scripts and 
+then later AJAX came along and people started using HTML not only for documents but to 
+describe crude applications. Over time the original purpose of the DOM was butchered
+until it devolved into TABLE hell into DIV hell. Increasingly HTML was used to describe
+anything but a document. At best, the notion of documents were still there, but were
+buried in many nested layers of DOM elements with little to no semantic meaning. 
 
-Developers are used to nesting HTML elements because that's *the* way to get
-relative positioning, event bubbling, and semantic structure. However, there is
-a cost to each of these: relative positioning causes slow page reflows on
-animating content; event bubbling is expensive when event propagation is not
-carefully managed; and semantic structure is not well separated from visual
-rendering in HTML.
+The crux of the problem was that the original HTML specification defined a 1-to-1
+relationship between the window object and the document contained therein. This 
+problem was magnified by AJAX, because website designers were not satisfied with 
+only displaying one document at a time. Sometimes they wanted to display many 
+documents. Take Twitter or the Facebook Wall. Each tweet is essentially a document
+and Twitter displays many tweets at a time. The same goes for Facebook. Each story 
+is essentially a document in a neverending stream of documents.
 
-Famo.us promises a rich 60 FPS experience, and to do so, we needed to circumvent
-these inefficiencies. When we decided to abstract away the DOM, we needed a way to maintain
-the expectations every web developer has of the DOM, but in a way that doesn't compromise on
-performance. The Render Tree is our solution to relative positioning and
-semantic structure. In other documentation we'll go into events and animation.
+TABLE hell and then DIV hell is how web developers dealt with the problem of turning
+a medium designed to support 1-to-1 relationship into one that supported a relationship
+of one window object to many documents. If you were to inspect any reasonable complex
+website/webapp today, you'd see massively nested structures, most of which is 
+used to for presentational purposes instead of the original semantic goals Tim Berners
+Lee and others at the W3C had in mind. To change these nested structures, you need to 
+perform many operations on the DOM, and since manipulating DOM is incredibly 
+inefficient, any approach that requires all these DOM interactions is doomed to be slow.
+
+Developers basically nested HTML elements because that was *the* way to get relative 
+positioning, event bubbling, and semantic structure. However, there is a cost to each 
+of all this complexity: relative positioning causes slow page reflows on animating 
+content; event bubbling is expensive when event propagation is not carefully managed; 
+and semantic structure is not well separated from visual rendering in HTML.
+
+If you were to inspect a website built with Famo.us, you'll notice a very different 
+approach to managing the DOM. Instead of heavily nested DOM, you'll instead see an 
+extremely flat DOM with only as many DOM elements as is necessary to move documents 
+around the page. We call the DOM elements that hold these mini documents (like a tweet
+or Facebook story) surfaces. If you're coming from iOS, you may already be familiar 
+with a similar concept, which CoreAnimation calls a Layer.
+
+Because the Famo.us Render Tree takes an altogether different approach that minimizes
+presentational DOM interactions, it is able to eliminate unnecessary DOM interactions 
+that can quickly bring the interface of a site to a crawl. 
+
+At first glance, an HTML purist may think "but what about the semantic value of the 
+DOM?!?!". Don't worry, because Famo.us surfaces can still host regular semantic HTML, 
+you don't lose anything relative to what everyone was already doing with all those
+nested DIVs. In a way, Famo.us is a windowing system for documents or even mini-apps
+that themselves contain documents or interactive controls. Basically, 
+
+Because Famo.us keeps the structure of an app in JavaScript and the structure of 
+documents in HTML, it basically gives you the best of both worlds. With Famo.us you
+now longer have to perform DOM acrobatics to make your page dance, bounce or boing.
+
+The presentational HTML controlled by Famo.us via JavaScript is basically just a list
+of HTML documents positioned on the screen using CSS 3D Matrices, instead of a rats nest
+of semantically meaningless DIVs.
+
+By circumventing all the inefficiencies of manually manipulating presentational DOM, 
+Famo.us can guarantee a rich 60 FPS experience. When we decided to abstract away the 
+DOM, we needed a way to maintain the expectations every web developer has of the DOM, 
+but in a way that doesn't compromise performance. The Render Tree is our solution to 
+achieving relative positioning, keeping semantic structure in JavaScript where it belongs
+and preserving semantic HTML where it belongs. This guide focuses on everything Famo.us
+does with respect to layout and rendering. In other guides we'll explore events and 
+animation.
 
 #Overview
 
@@ -295,3 +343,5 @@ To recap, here's a comparison between traditional DOM, and the Famo.us Render Tr
 | *Meaning*         | Structure               | Structure, Rendering |
 | *Render Cycle*    | Retain Mode             | Immediate Mode |
 | *Language*        | JavaScript              | HTML          |
+
+[cgi]: http://en.wikipedia.org/wiki/Common_Gateway_Interface
